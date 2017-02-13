@@ -5,7 +5,9 @@ import config from 'config';
 import mongoose from 'mongoose';
 
 // Setup MongoDB connection
-mongoose.connect(`mongodb://${config.mongo.host}/${config.mongo.dbname}`);
+mongoose.Promise = global.Promise;
+const mongooseOptions = { promiseLibrary: require('bluebird') };
+mongoose.connect(`mongodb://${config.mongo.host}/${config.mongo.dbname}`, mongooseOptions);
 
 // Start Express
 const app = express();
