@@ -9,9 +9,6 @@ const createRoutes = (app, folderName) => {
     if (stat.isDirectory()) {
       createRoutes(app, fullName);
     } else {
-      // const name = file.substr(0, file.indexOf('.'));
-      // const fullName = path.join(folderName, name);
-      //if (path === './') return;
       require(fullName).default(app);
     }
   });

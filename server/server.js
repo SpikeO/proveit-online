@@ -1,8 +1,9 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import path from 'path';
-import cookie from 'react-cookie';
 import config from 'config';
 import mongoose from 'mongoose';
+import createRoutes from './routes';
 
 // Setup MongoDB connection
 mongoose.Promise = global.Promise;
@@ -11,6 +12,7 @@ mongoose.connect(`mongodb://${config.mongo.host}/${config.mongo.dbname}`, mongoo
 
 // Start Express
 const app = express();
+app.use(bodyParser.json());
 app.use(express.static(`${__dirname}/public`));
 
 const host = config.server.host;
@@ -19,9 +21,7 @@ app.listen(port, () => {
   console.log('App listening at http://%s:%s', host, port);
 });
 
-app.use('/get', (req, res) => {
-  cookie.plugToRequest(req, res);
-});
+createRoutes(app, path.join(__dirname, 'routes'));
 
 app.get('/*', (request, response) => {
   response.sendFile(path.join(__dirname, '../public/index.html'));
