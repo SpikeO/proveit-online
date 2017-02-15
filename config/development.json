@@ -6,5 +6,6 @@
   "mongo": {
     "dbname": "proveit-online",
     "host": "127.0.0.1"
-  }
+  },
+  "jwtSecret": "glut-knockout-accrete"
 }
