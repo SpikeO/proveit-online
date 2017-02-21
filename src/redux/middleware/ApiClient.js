@@ -25,7 +25,7 @@ export default class ApiClient {
           request.send(data);
         }
         const localStorageToken = localStorage.getItem('token');
-        if ((path !== '/auth/login' && localStorageToken.length > 0)) {
+        if (localStorageToken) {
           request.set('Authorization', `Bearer ${localStorageToken}`);
         }
 
