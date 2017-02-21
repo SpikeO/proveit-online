@@ -16,7 +16,6 @@ export default class ApiClient {
   constructor(req) {
     methods.forEach((method) =>
       this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
-        console.log('==== ApiClient::formatUrl(path)', formatUrl(path));
         const request = superagent[method](formatUrl(path));
 
         if (params) {
@@ -26,11 +25,7 @@ export default class ApiClient {
           request.send(data);
         }
         const localStorageToken = localStorage.getItem('token');
-        const sendBearer = (path !== '/auth/login' && localStorageToken.length > 0);
-        console.log('======= ApiClient::localStorageToken', localStorageToken);
-        console.log('========== ApiClient::path', path);
-        console.log('=== ApiClient::sendBearer', sendBearer);
-        if (sendBearer) {
+        if ((path !== '/auth/login' && localStorageToken.length > 0)) {
           request.set('Authorization', `Bearer ${localStorageToken}`);
         }
 
