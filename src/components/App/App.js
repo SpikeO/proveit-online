@@ -1,9 +1,34 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import logo from './logo.svg';
 import './App.css';
-import { Link } from 'react-router';
+import { load as loadAuth } from '../../redux/modules/auth/actions';
 
 class App extends Component {
+  static propTypes = {
+    token: PropTypes.string,
+    user: PropTypes.object,
+  };
+
+  componentDidMount() {
+    if (!this.props.token && localStorage.getItem('token')) {
+      this.props.loadAuth();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.token && nextProps.token) {
+      this.props.loadAuth();
+    } else if (!this.props.user && nextProps.user) {
+      // login
+      this.props.pushState('/loginSuccess');
+    } else if (this.props.user && !nextProps.user) {
+      // logout
+      this.props.pushState('/');
+    }
+  }
+
   render() {
     const { children } = this.props;
     return (
@@ -22,4 +47,9 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(
+  state => ({
+    token: state.getIn(['auth', 'token']),
+  }),
+  { loadAuth },
+)(App);
