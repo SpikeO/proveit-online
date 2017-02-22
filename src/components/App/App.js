@@ -8,7 +8,7 @@ import { load as loadAuth } from '../../redux/modules/auth/actions';
 class App extends Component {
   static propTypes = {
     token: PropTypes.string,
-    user: PropTypes.object,
+    userObj: PropTypes.object,
   };
 
   componentDidMount() {
@@ -30,14 +30,14 @@ class App extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, userObj } = this.props;
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
           <Link to="/">Home</Link>
-          <Link to="/login">Login</Link>
+          {!userObj && <Link to="/login">Login</Link>}
         </div>
         <div>
           {children}
@@ -50,6 +50,7 @@ class App extends Component {
 export default connect(
   state => ({
     token: state.getIn(['auth', 'token']),
+    userObj: state.getIn(['auth', 'user']),
   }),
   { loadAuth },
 )(App);

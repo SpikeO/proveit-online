@@ -14,7 +14,8 @@ router.get('/user', async(req, res) => {
       if (userErr || !user) {
         return res.status(401).end();
       }
-      return res.status(200).json(user);
+      const { email } = user;
+      return res.status(200).json({ email });
     });
   });
 });
